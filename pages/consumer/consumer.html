@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Talksy — Área do Aluno</title>
+   <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+
+  <style>
+    :root {
+      --purple-900:#4b00c2;
+      --purple-700:#6f20d9;
+      --purple-500:#9a5bff;
+      --bg:#faf7ff;
+      --card:#fff;
+      --muted:#6b6b6b;
+      --shadow:0 6px 18px rgba(11,8,40,0.08);
+      font-family: "Inter", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      display: flex;
+      min-height: 100vh;
+      background: linear-gradient(180deg, var(--bg), #fff);
+      color: #111;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 240px;
+      background: linear-gradient(180deg, var(--purple-700), var(--purple-900));
+      color: #fff;
+      padding: 28px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 26px;
+      font-weight: 700;
+    }
+
+    .brand .logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+    }
+
+    nav {
+      display: flex;
+      flex-direction: column;
+      margin-top: 20px;
+      gap: 8px;
+    }
+
+    .nav-item {
+      padding: 10px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      color: rgba(255, 255, 255, 0.9);
+      transition: background 0.2s;
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .logout {
+      margin-top: 30px;
+      padding: 10px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      text-align: center;
+      cursor: pointer;
+    }
+
+    /* Main content */
+    main {
+      flex: 1;
+      padding: 32px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+
+    header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--purple-700);
+    }
+
+    .avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: linear-gradient(180deg, var(--purple-500), var(--purple-700));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    section {
+      margin-top: 10px;
+    }
+
+    h2 {
+      font-size: 20px;
+      margin: 16px 0 10px;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .card img {
+      width: 100%;
+      height: 150px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    .card h3 {
+      font-size: 16px;
+      color: #222;
+      margin: 4px 0 0;
+    }
+
+    .card p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .btn {
+      background: var(--purple-700);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 10px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s;
+      margin-top: 4px;
+    }
+
+    .btn:hover {
+      background: var(--purple-500);
+    }
+
+    .player {
+      margin-top: 30px;
+      background: var(--card);
+      padding: 16px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    audio {
+      width: 100%;
+      outline: none;
+    }
+
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      main { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div>
+      <div class="brand">
+        <div class="logo">T</div>
+        <div>Talksy</div>
+      </div>
+      <nav>
+        <div class="nav-item active">Início</div>
+        <div class="nav-item">Minha Biblioteca</div>
+        <div class="nav-item">Favoritos</div>
+        <div class="nav-item">Configurações</div>
+      </nav>
+    </div>
+    <div class="logout" id="logoutBtn">Sair</div>
+  </aside>
+
+  <!-- Main content -->
+  <main>
+    <header>
+      <h1>Bem-vindo(a) ao Talksy!</h1>
+      <div class="avatar" id="avatar">US</div>
+    </header>
+
+    <section>
+      <h2>Descubra novos podcasts</h2>
+      <div class="card-grid">
+        <div class="card">
+          <img src="https://source.unsplash.com/300x200/?technology" alt="Podcast 1">
+          <h3>Introdução à Robótica</h3>
+          <p>Compreenda os conceitos fundamentais da automação e robótica aplicada à indústria 4.0.</p>
+          <button class="btn" onclick="playPodcast('audios/podcast1.mp3')">Ouvir agora</button>
+        </div>
+
+        <div class="card">
+          <img src="https://source.unsplash.com/300x200/?energy" alt="Podcast 2">
+          <h3>Eficiência Energética</h3>
+          <p>Dicas e práticas sustentáveis para otimizar o consumo de energia elétrica.</p>
+          <button class="btn" onclick="playPodcast('audios/podcast2.mp3')">Ouvir agora</button>
+        </div>
+
+        <div class="card">
+          <img src="https://source.unsplash.com/300x200/?engineering" alt="Podcast 3">
+          <h3>Segurança no Trabalho</h3>
+          <p>Entenda como prevenir acidentes e garantir boas práticas em ambientes industriais.</p>
+          <button class="btn" onclick="playPodcast('audios/podcast3.mp3')">Ouvir agora</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="player" id="playerSection" style="display:none;">
+      <h2>Reproduzindo agora</h2>
+      <audio id="audioPlayer" controls></audio>
+    </section>
+  </main>
+
+  <script>
+    // Verificação de sessão
+    const user = JSON.parse(localStorage.getItem("loggedUser"));
+    if (!user || user.type !== "consumer") {
+      alert("Acesso negado! Faça login novamente.");
+      window.location.href = "../auth/login.html";
+    }
+
+    // Exibir iniciais do usuário
+    const avatar = document.getElementById("avatar");
+    if (user && user.username) {
+      avatar.textContent = user.username.charAt(0).toUpperCase() + user.username.charAt(1).toLowerCase();
+    }
+
+    // Função de tocar podcast
+    function playPodcast(src) {
+      const playerSection = document.getElementById("playerSection");
+      const audio = document.getElementById("audioPlayer");
+      playerSection.style.display = "block";
+      audio.src = src;
+      audio.play();
+    }
+
+    // Logout
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      const confirmExit = confirm("Deseja realmente sair?");
+      if (confirmExit) {
+        localStorage.removeItem("loggedUser");
+        window.location.href = "../auth/login.html";
+      }
+    });
+  </script>
+</body>
+</html>

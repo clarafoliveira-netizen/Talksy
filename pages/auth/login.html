@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Talksy - Login</title>
+   <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+
+  <style>
+    :root {
+      --purple-700: #6f20d9;
+      --purple-500: #9a5bff;
+      --bg: #f6f3ff;
+      --white: #fff;
+      --gray: #666;
+      --shadow: 0 8px 24px rgba(0,0,0,0.1);
+      --radius: 16px;
+      font-family: "Inter", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, var(--bg), #ffffff);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+      background: var(--white);
+      padding: 40px 32px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--purple-700);
+      margin-bottom: 20px;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .logo:hover {
+      color: var(--purple-500);
+    }
+
+    h1 {
+      color: var(--purple-700);
+      font-size: 24px;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    p {
+      color: var(--gray);
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    input {
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      font-size: 15px;
+      width: 100%;
+    }
+
+    button {
+      background: var(--purple-700);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: var(--purple-500);
+    }
+
+    .error {
+      color: #e63946;
+      font-size: 14px;
+      margin-top: -8px;
+    }
+
+    .link {
+      font-size: 14px;
+      margin-top: 16px;
+    }
+
+    .link a {
+      color: var(--purple-700);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo" onclick="goHome()">🎧 Talksy</div>
+    <h1>Bem-vindo(a) de volta!</h1>
+    <p>Entre na sua conta para acessar os conteúdos</p>
+
+    <!-- Login -->
+    <form id="login-form">
+      <input type="text" id="login-username" placeholder="Usuário" required>
+      <input type="password" id="login-password" placeholder="Senha" required>
+      <button type="button" onclick="login()">Entrar</button>
+      <p id="login-error" class="error"></p>
+    </form>
+
+    <div class="link">
+      Não tem conta? <a href="cadastrar.html">Crie uma aqui</a>
+    </div>
+  </div>
+
+  <script>
+    // Função do logo Talksy -> volta para o index
+    function goHome() {
+      window.location.href = "../../index.html";
+    }
+
+    // Carregar usuários do localStorage
+    let storedUsers = JSON.parse(localStorage.getItem("users")) || [];
+
+    // Usuários fixos mockados
+    const baseUsers = [
+      { username: "consumer", password: "consumer", type: "consumer", redirect: "../../pages/consumer/consumer.html" },
+      { username: "criador", password: "criador", type: "criador", redirect: "../../pages/criador/criador.html" },
+      { username: "admin", password: "admin", type: "admin", redirect: "../../pages/admin/admin.html" }
+    ];
+
+    // Unir base + armazenados
+    let users = [...baseUsers, ...storedUsers];
+
+    // Função de login
+    function login() {
+      const user = document.getElementById("login-username").value.trim();
+      const pass = document.getElementById("login-password").value.trim();
+      const errorEl = document.getElementById("login-error");
+
+      const found = users.find(u => u.username === user && u.password === pass);
+      if (!found) {
+        errorEl.textContent = "Usuário ou senha incorretos.";
+        return;
+      }
+
+      errorEl.textContent = "";
+
+      // Salvar sessão
+      localStorage.setItem("loggedUser", JSON.stringify(found));
+
+      alert(`Bem-vindo(a), ${found.username}! Redirecionando para o módulo ${found.type}...`);
+      window.location.href = found.redirect;
+    }
+  </script>
+</body>
+</html>

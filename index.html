@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Talksy — Aprenda ouvindo</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <style>
+    :root {
+      --purple-900:#4b00c2;
+      --purple-700:#6f20d9;
+      --purple-500:#9a5bff;
+      --bg:#faf7ff;
+      --white:#fff;
+      --muted:#6b6b6b;
+      --shadow:0 6px 18px rgba(11,8,40,0.08);
+      font-family: "Inter", system-ui, sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: #111;
+      font-family: "Inter", sans-serif;
+      line-height: 1.6;
+    }
+
+    /* Header */
+    header {
+      background: var(--white);
+      box-shadow: var(--shadow);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--purple-700);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: var(--purple-700);
+    }
+
+    /* Hero section */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 90vh;
+      padding: 160px 20px 100px;
+      background: linear-gradient(180deg, var(--purple-700), var(--purple-900));
+      color: white;
+    }
+
+    .hero h1 {
+      font-size: 42px;
+      font-weight: 800;
+      max-width: 800px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      margin-top: 16px;
+      max-width: 700px;
+      opacity: 0.9;
+    }
+
+    .hero .buttons {
+      margin-top: 30px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+
+    .btn-primary {
+      background: var(--white);
+      color: var(--purple-700);
+    }
+
+    .btn-primary:hover {
+      background: #f3eaff;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid #fff;
+      color: white;
+    }
+
+    .btn-outline:hover {
+      background: rgba(255,255,255,0.15);
+    }
+
+    /* Sections */
+    section {
+      max-width: 1100px;
+      margin: 100px auto;
+      padding: 0 20px;
+    }
+
+    h2.section-title {
+      font-size: 28px;
+      text-align: center;
+      color: var(--purple-700);
+      margin-bottom: 30px;
+    }
+
+    /* Quem Somos */
+    .about p {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    /* Gêneros */
+    .genres-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .genre-card {
+      background: var(--white);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.2s;
+    }
+
+    .genre-card:hover {
+      transform: translateY(-6px);
+    }
+
+    .genre-card img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .genre-card h3 {
+      font-size: 18px;
+      color: var(--purple-700);
+    }
+
+    /* Biblioteca */
+    .library {
+      text-align: center;
+      background: linear-gradient(180deg, var(--purple-700), var(--purple-900));
+      color: white;
+      padding: 80px 20px;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .library p {
+      font-size: 18px;
+      margin-top: 10px;
+      opacity: 0.9;
+    }
+
+    .library button {
+      margin-top: 24px;
+      background: white;
+      color: var(--purple-700);
+      font-weight: 700;
+      padding: 12px 28px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+
+    .library button:hover {
+      background: #f3eaff;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 32px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav-container">
+      <div class="logo">🎧 Talksy</div>
+      <nav>
+        <a href="pages/auth/login.html">Login</a>
+        <a href="pages/auth/cadastrar.html">Cadastro</a>
+        <a href="#sobre">Quem Somos</a>
+        <a href="#generos">Gêneros</a>
+        <a href="#biblioteca">Biblioteca</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>Transforme o aprendizado em uma experiência sonora.</h1>
+    <p>Com o Talksy, você aprende ouvindo. Acesse podcasts educativos criados por instrutores do SENAI e aprimore suas habilidades em qualquer lugar.</p>
+    <div class="buttons">
+      <a href="pages/auth/login.html"><button class="btn btn-primary">Entrar</button></a>
+      <a href="pages/auth/cadastrar.html"><button class="btn btn-outline">Cadastrar</button></a>
+    </div>
+  </section>
+
+  <!-- Quem Somos -->
+  <section id="sobre" class="about">
+    <h2 class="section-title">Quem Somos</h2>
+    <p>O Talksy é uma plataforma desenvolvida por alunos do SENAI para promover o aprendizado através de podcasts educacionais. Nossa missão é tornar o ensino técnico mais acessível, dinâmico e adaptado à rotina de cada estudante, com conteúdos produzidos por professores e especialistas da indústria.</p>
+  </section>
+
+  <!-- Gêneros -->
+  <section id="generos">
+    <h2 class="section-title">Gêneros Populares</h2>
+    <div class="genres-grid">
+      <div class="genre-card">
+        <img src="https://source.unsplash.com/300x200/?technology" alt="Tecnologia">
+        <h3>Tecnologia</h3>
+      </div>
+      <div class="genre-card">
+        <img src="https://source.unsplash.com/300x200/?automation" alt="Automação">
+        <h3>Automação Industrial</h3>
+      </div>
+      <div class="genre-card">
+        <img src="https://source.unsplash.com/300x200/?safety" alt="Segurança">
+        <h3>Segurança no Trabalho</h3>
+      </div>
+      <div class="genre-card">
+        <img src="https://source.unsplash.com/300x200/?energy" alt="Energia">
+        <h3>Eficiência Energética</h3>
+      </div>
+    </div>
+  </section>
+
+  <!-- Biblioteca -->
+  <section id="biblioteca" class="library">
+    <h2>Acesse Nossa Biblioteca</h2>
+    <p>Explore centenas de episódios criados por instrutores do SENAI e aprenda sobre tecnologia, inovação e indústria de forma prática e inspiradora.</p>
+    <a href="pages/auth/login.html"><button>Entrar na Biblioteca</button></a>
+  </section>
+
+  <footer>
+    © 2025 Talksy — Desenvolvido por alunos do SENAI Petrópolis
+  </footer>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Talksy - Cadastro</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+
+  <style>
+    :root {
+      --purple-700: #6f20d9;
+      --purple-500: #9a5bff;
+      --bg: #f6f3ff;
+      --white: #fff;
+      --gray: #666;
+      --shadow: 0 8px 24px rgba(0,0,0,0.1);
+      --radius: 16px;
+      font-family: "Inter", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, var(--bg), #ffffff);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+      background: var(--white);
+      padding: 40px 32px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--purple-700);
+      margin-bottom: 20px;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .logo:hover {
+      color: var(--purple-500);
+    }
+
+    h1 {
+      color: var(--purple-700);
+      font-size: 24px;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    p {
+      color: var(--gray);
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    input {
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      font-size: 15px;
+      width: 100%;
+    }
+
+    button {
+      background: var(--purple-700);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: var(--purple-500);
+    }
+
+    .msg {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .msg.success {
+      color: #2aa84a;
+    }
+
+    .msg.error {
+      color: #e63946;
+    }
+
+    .link {
+      margin-top: 16px;
+      font-size: 14px;
+    }
+
+    .link a {
+      color: var(--purple-700);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo" onclick="goHome()">🎧 Talksy</div>
+    <h1>Cadastro</h1>
+    <p>Crie sua conta para acessar o Talksy</p>
+
+    <form id="formCadastro">
+      <input type="text" id="usuario" placeholder="Usuário" required>
+      <input type="password" id="senha" placeholder="Senha" required>
+      <button type="submit">Cadastrar</button>
+      <div id="mensagem" class="msg"></div>
+    </form>
+
+    <div class="link">
+      Já tem conta? <a href="login.html">Entrar</a>
+    </div>
+  </div>
+
+  <script>
+    // Redirecionamento ao index
+    function goHome() {
+      window.location.href = "../../index.html";
+    }
+
+    const form = document.getElementById("formCadastro");
+    const msg = document.getElementById("mensagem");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const usuario = document.getElementById("usuario").value.trim();
+      const senha = document.getElementById("senha").value.trim();
+
+      if (!usuario || !senha) {
+        msg.textContent = "Preencha todos os campos.";
+        msg.className = "msg error";
+        return;
+      }
+
+      // Carregar usuários existentes do localStorage
+      let users = JSON.parse(localStorage.getItem("users")) || [];
+
+      // Verificar se o usuário já existe
+      if (users.some(u => u.username === usuario)) {
+        msg.textContent = "Usuário já cadastrado.";
+        msg.className = "msg error";
+        return;
+      }
+
+      // Criar novo usuário tipo consumer
+      const novoUsuario = {
+        username: usuario,
+        password: senha,
+        type: "consumer",
+        redirect: "../../pages/consumer/consumer.html"
+      };
+
+      users.push(novoUsuario);
+      localStorage.setItem("users", JSON.stringify(users));
+
+      msg.textContent = "Cadastro realizado com sucesso! Redirecionando...";
+      msg.className = "msg success";
+
+      // Limpar campos
+      form.reset();
+
+      // Redirecionar após 2 segundos
+      setTimeout(() => {
+        window.location.href = "login.html";
+      }, 2000);
+    });
+  </script>
+</body>
+</html>

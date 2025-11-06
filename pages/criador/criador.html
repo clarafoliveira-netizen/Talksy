@@ -1,0 +1,474 @@
+<!-- Salve este conteúdo como "criador.html" -->
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Talksy — Painel do Criador</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+  <style>
+    :root{
+      --purple-900:#4b00c2;
+      --purple-700:#6f20d9;
+      --purple-500:#9a5bff;
+      --lavender:#f3eaff;
+      --bg:#faf7ff;
+      --card:#ffffff;
+      --muted:#6b6b6b;
+      --success:#2aa84a;
+      --danger:#e04b4b;
+      --glass: rgba(255,255,255,0.6);
+      --shadow: 0 6px 18px rgba(11,8,40,0.08);
+      --radius:14px;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#fff);color:#111}
+    a{color:inherit;text-decoration:none}
+
+    /* Layout */
+    .app{
+      display:flex;
+      min-height:100vh;
+      align-items:stretch;
+    }
+
+    /* Sidebar */
+    .sidebar{
+      width:260px;
+      background:linear-gradient(180deg,var(--purple-700),var(--purple-900));
+      color:#fff;
+      padding:28px 18px;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+    .brand{display:flex;align-items:center;gap:12px;font-weight:700;font-size:26px}
+    .brand .logo{
+      width:46px;height:46px;border-radius:10px;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-weight:800;
+      box-shadow: inset 0 -6px 10px rgba(0,0,0,0.06);
+    }
+    nav{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+    .nav-item{
+      display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;color:rgba(255,255,255,0.95);cursor:pointer;
+    }
+    .nav-item:hover{background:rgba(255,255,255,0.06)}
+    .nav-item.active{background:rgba(255,255,255,0.12);font-weight:600}
+    .nav-item svg{width:18px;height:18px;opacity:0.95}
+
+    .sidebar .logout{margin-top:auto;display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.04);cursor:pointer}
+    .credit{font-size:12px;opacity:0.85;margin-top:6px}
+
+    /* Main content */
+    .main{
+      flex:1;
+      padding:32px;
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:22px;
+    }
+
+    .title{
+      font-size:34px;
+      font-weight:700;
+      color:#121212;
+    }
+
+    .top-actions{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .search{
+      display:flex;align-items:center;background:#fff;padding:8px 12px;border-radius:12px;box-shadow:var(--shadow);gap:8px;border:1px solid #f0f0f0;
+    }
+    .search input{border:0;outline:0;background:transparent;width:240px;font-size:14px}
+    .avatar{
+      width:46px;height:46px;border-radius:50%;background:linear-gradient(180deg,var(--purple-500),var(--purple-700));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px;box-shadow:var(--shadow);
+    }
+
+    /* Grid */
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 340px;
+      gap:24px;
+      align-items:start;
+    }
+
+    /* Left column (cards and actions) */
+    .left{
+      display:flex;flex-direction:column;gap:18px;
+    }
+
+    .cards{
+      display:grid;grid-template-columns:repeat(2,1fr);gap:16px;
+    }
+
+    .card{
+      background:var(--card);
+      border-radius:12px;
+      padding:14px;
+      box-shadow:var(--shadow);
+      display:flex;gap:12px;align-items:center;
+      min-height:92px;
+      border:1px solid #f2f2f4;
+    }
+    .thumb{
+      width:84px;height:84px;border-radius:10px;background:#eee;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden;
+    }
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+    .card .meta{flex:1}
+    .card h4{margin:0;font-size:18px}
+    .card p{margin:6px 0 0;color:var(--muted);font-size:13px}
+    .status{display:inline-block;padding:6px 10px;border-radius:999px;font-size:12px;margin-top:8px}
+    .status.published{background:rgba(34,197,94,0.08);color:var(--success);border:1px solid rgba(34,197,94,0.12)}
+    .status.draft{background:rgba(10,10,10,0.04);color:#333;border:1px solid rgba(0,0,0,0.04)}
+    .card .meta .date{font-size:12px;color:#9b9b9b;margin-top:6px}
+
+    /* Quick actions row */
+    .quick-actions{
+      display:flex;gap:12px;align-items:center;
+    }
+    .qa{
+      background:linear-gradient(180deg,#fff,#faf7ff);border-radius:12px;padding:14px;flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;border:1px solid #f4f1ff;box-shadow:var(--shadow)
+    }
+    .qa button{background:transparent;border:0;padding:8px 10px;border-radius:8px;cursor:pointer;font-weight:600}
+    .fab{
+      position:fixed;right:28px;bottom:28px;width:84px;height:84px;border-radius:50%;background:var(--purple-700);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;border:6px solid rgba(255,255,255,0.06);box-shadow:0 18px 40px rgba(75,0,194,0.18);cursor:pointer
+    }
+
+    /* Right column (side panel) */
+    .right{
+      display:flex;flex-direction:column;gap:14px;
+    }
+    .panel{
+      background:var(--card);padding:14px;border-radius:12px;box-shadow:var(--shadow);border:1px solid #f2f2f4;
+    }
+    .panel h3{margin:0 0 8px 0;font-size:16px}
+    .stat-row{display:flex;gap:12px;align-items:center;justify-content:space-between}
+    .stat{
+      background:linear-gradient(180deg,#fff,#faf7ff);padding:12px;border-radius:10px;display:flex;flex-direction:column;gap:6px;flex:1;align-items:flex-start;border:1px solid #f4f1ff;
+    }
+    .stat strong{font-size:20px}
+    .notif-list{display:flex;flex-direction:column;gap:10px}
+    .notif{display:flex;gap:10px;align-items:flex-start;padding:8px;border-radius:8px;background:linear-gradient(90deg,#fff,#fbf8ff);border:1px solid #f4f1ff}
+    .notif p{margin:0;font-size:13px}
+    .small{font-size:12px;color:var(--muted)}
+
+    /* Responsive */
+    @media (max-width:980px){
+      .grid{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr}
+      .sidebar{display:none}
+      .fab{right:18px;bottom:18px}
+    }
+
+    /* Modal (novo episódio) */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(11,8,40,0.36);display:none;align-items:center;justify-content:center;padding:18px;z-index:999}
+    .modal{width:100%;max-width:760px;background:#fff;border-radius:12px;padding:18px;box-shadow:0 30px 80px rgba(11,8,40,0.4)}
+    .form-row{display:flex;gap:12px;margin-bottom:12px}
+    .form-row input,.form-row textarea,select{flex:1;padding:10px;border-radius:8px;border:1px solid #e9e7fb;font-size:14px}
+    .form-row textarea{min-height:120px;resize:vertical}
+    .modal .actions{display:flex;justify-content:flex-end;gap:10px;margin-top:12px}
+    .btn{padding:10px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:700}
+    .btn.primary{background:var(--purple-700);color:#fff}
+    .btn.ghost{background:transparent;border:1px solid #e9e7fb;color:#333}
+
+    /* tiny helpers */
+    .muted{color:var(--muted)}
+  </style>
+</head>
+<body>
+  <div class="app" role="application" aria-label="Painel do Criador Talksy">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" aria-label="Menu lateral">
+      <div class="brand" aria-hidden="true">
+        <div class="logo">T</div>
+        <div>talksy</div>
+      </div>
+
+      <nav role="navigation" aria-label="Navegação principal">
+        <div class="nav-item active" tabindex="0">
+          <!-- home icon -->
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 11.5L12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V11.5z" fill="currentColor"/></svg>
+          <span>Dashboard</span>
+        </div>
+        <div class="nav-item" tabindex="0">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M5 6h14M5 18h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <span>Meus Episódios</span>
+        </div>
+        <div class="nav-item" tabindex="0">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 3v18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <span>Estatísticas</span>
+        </div>
+        <div class="nav-item" tabindex="0">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 10c0 5-9 9-9 9S3 15 3 10a9 9 0 1 1 18 0z" stroke="currentColor" stroke-width="1.5"/></svg>
+          <span>Comentários</span>
+        </div>
+        <div class="nav-item" tabindex="0">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2v2M4.2 6.2l1.4 1.4M2 12h2M4.2 17.8l1.4-1.4M12 20v2M17.8 19.8l-1.4-1.4M20 12h2M17.8 6.2l-1.4 1.4" stroke="currentColor" stroke-width="1.4"/></svg>
+          <span>Configurações</span>
+        </div>
+      </nav>
+
+      <div class="credit small">Conta: Maria Silva<br/>Criador de Conteúdo</div>
+
+      <div class="logout" role="button" tabindex="0" aria-label="Sair">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" style="opacity:0.95"><path d="M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Sair
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <div class="topbar">
+        <div>
+          <div class="title">Painel do Criador</div>
+          <div class="muted" style="margin-top:6px">Gerencie seus episódios, acompanhe estatísticas e publique conteúdo.</div>
+        </div>
+
+        <div class="top-actions" role="region" aria-label="Ações rápidas">
+          <div class="search" role="search" aria-label="Pesquisar episódios">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" style="opacity:0.7"><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="1.6" fill="none"/></svg>
+            <input type="search" placeholder="Buscar por título, curso ou tag" aria-label="Pesquisar" />
+          </div>
+          <div class="avatar" title="Perfil de usuário" aria-hidden="true">MS</div>
+        </div>
+      </div>
+
+      <div class="grid" role="main">
+        <!-- LEFT -->
+        <section class="left" aria-labelledby="left-title">
+          <div id="left-title" style="display:none">Conteúdo do Criador</div>
+
+          <!-- cards grid -->
+          <div class="cards" aria-live="polite">
+            <article class="card" role="article" aria-label="Episódio Introdução à Automação">
+              <div class="thumb" aria-hidden="true">
+                <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><rect width='100%' height='100%' fill='%23dfeaff'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='22' fill='%236b6b6b'>Automação</text></svg>" alt="" />
+              </div>
+              <div class="meta">
+                <h4>Introdução à Automação</h4>
+                <p class="small">Publicado • 10 fev 2024</p>
+                <div class="status published" aria-hidden="true">Publicado</div>
+              </div>
+            </article>
+
+            <article class="card" role="article" aria-label="Episódio Segurança em Eletricidade">
+              <div class="thumb" aria-hidden="true">
+                <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><rect width='100%' height='100%' fill='%23ffeedd'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='20' fill='%236b6b6b'>Segurança</text></svg>" alt="" />
+              </div>
+              <div class="meta">
+                <h4>Segurança em Eletricidade</h4>
+                <p class="small">Publicado • 10 fev 2024</p>
+                <div class="status published">Publicado</div>
+              </div>
+            </article>
+
+            <article class="card" role="article" aria-label="Episódio Internet Industrial das Coisas">
+              <div class="thumb" aria-hidden="true">
+                <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><rect width='100%' height='100%' fill='%23e7f0ff'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='18' fill='%236b6b6b'>IoT</text></svg>" alt="" />
+              </div>
+              <div class="meta">
+                <h4>Internet Industrial das Coisas</h4>
+                <p class="small">Publicado • 20 fev 2024</p>
+                <div class="status published">Publicado</div>
+              </div>
+            </article>
+
+            <article class="card" role="article" aria-label="Episódio Manutenção Preditiva (rascunho)">
+              <div class="thumb" aria-hidden="true" style="background:linear-gradient(180deg,var(--purple-500),var(--purple-700));color:#fff;display:flex;align-items:center;justify-content:center">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2v20M2 12h20" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>
+              </div>
+              <div class="meta">
+                <h4>Manutenção Preditiva</h4>
+                <p class="small">Rascunho • 30 jan 2024</p>
+                <div class="status draft">Rascunho</div>
+              </div>
+            </article>
+          </div>
+
+          <!-- quick actions -->
+          <div class="quick-actions" style="margin-top:6px">
+            <div class="qa" role="region" aria-label="Enviar áudio">
+              <strong>Enviar Áudio</strong>
+              <div class="muted">Envie um novo episódio em MP3/WAV.</div>
+              <button onclick="openModal()">Enviar Áudio</button>
+            </div>
+
+            <div class="qa" role="region" aria-label="Gerenciar episódios">
+              <strong>Gerenciar Episódios</strong>
+              <div class="muted">Editar, excluir ou vincular ao curso.</div>
+              <button onclick="alert('Ir para Meus Episódios (simulado)')">Gerenciar</button>
+            </div>
+
+            <div class="qa" role="region" aria-label="Vincular ao curso">
+              <strong>Vincular ao Curso</strong>
+              <div class="muted">Associe episódios a disciplinas da MSEP.</div>
+              <button onclick="alert('Vincular (simulado)')">Vincular</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- RIGHT -->
+        <aside class="right" aria-labelledby="right-title">
+          <div id="right-title" style="display:none">Painéis laterais</div>
+
+          <div class="panel" aria-live="polite">
+            <h3>Resumo Rápido</h3>
+            <div class="stat-row" style="margin-top:10px">
+              <div class="stat" style="min-width:120px">
+                <span class="small">Plays (30d)</span>
+                <strong>12.3k</strong>
+                <span class="small muted">Média diária 410</span>
+              </div>
+              <div class="stat" style="min-width:120px">
+                <span class="small">Favoritos</span>
+                <strong>1.2k</strong>
+                <span class="small muted">+ 8% mês</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h3>Notificações</h3>
+            <div class="notif-list">
+              <div class="notif" role="article">
+                <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(180deg,var(--purple-500),var(--purple-700));display:flex;align-items:center;justify-content:center;color:#fff">A</div>
+                <div>
+                  <p><strong>Admin</strong> aprovou seu episódio "Introdução à Automação".</p>
+                  <div class="small">2 horas atrás</div>
+                </div>
+              </div>
+
+              <div class="notif" role="article">
+                <div style="width:36px;height:36px;border-radius:8px;background:#ffdedd;display:flex;align-items:center;justify-content:center;color:#a00">!</div>
+                <div>
+                  <p><strong>Curadoria:</strong> Transcrição precisa ser ajustada em "IoT".</p>
+                  <div class="small">1 dia</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h3>Últimos Comentários</h3>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div style="display:flex;gap:10px;align-items:flex-start">
+                <div style="width:36px;height:36px;border-radius:50%;background:#eee"></div>
+                <div>
+                  <div style="font-weight:600">João</div>
+                  <div class="small">Ótima explicação sobre sensoriamento. Pode enviar slides?</div>
+                  <div class="small muted">3 dias</div>
+                </div>
+              </div>
+
+              <div style="display:flex;gap:10px;align-items:flex-start">
+                <div style="width:36px;height:36px;border-radius:50%;background:#eee"></div>
+                <div>
+                  <div style="font-weight:600">Maria</div>
+                  <div class="small">Consegue adicionar exercícios complementares?</div>
+                  <div class="small muted">5 dias</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </aside>
+      </div>
+
+      <!-- FAB -->
+      <div class="fab" title="Novo Episódio" role="button" onclick="openModal()" aria-label="Novo Episódio">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" style="filter:drop-shadow(0 6px 18px rgba(75,0,194,0.18))"><path d="M12 5v14M5 12h14" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL: Novo Episódio -->
+  <div id="modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal" role="document">
+      <h2 id="modal-title">Novo Episódio</h2>
+      <div class="form-row">
+        <input id="title" placeholder="Título do episódio" aria-label="Título do episódio" />
+        <select id="course" aria-label="Selecionar curso">
+          <option value="">Selecionar curso / disciplina</option>
+          <option>Automação Industrial</option>
+          <option>Eletricidade</option>
+          <option>Manutenção</option>
+          <option>IoT</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <input id="file" type="file" accept="audio/*" aria-label="Arquivo de áudio"/>
+      </div>
+      <div class="form-row">
+        <textarea id="desc" placeholder="Descrição curta do episódio (resumo)"></textarea>
+      </div>
+      <div class="form-row" style="align-items:center">
+        <input id="tags" placeholder="Tags (separadas por vírgula)" />
+        <input id="thumbnail" placeholder="URL da miniatura (opcional)" />
+      </div>
+
+      <div class="actions">
+        <button class="btn ghost" onclick="closeModal()">Cancelar</button>
+        <button class="btn primary" onclick="submitEpisode()">Enviar para revisão</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  // Modal functions
+  const modal = document.getElementById('modal');
+  function openModal(){ modal.style.display='flex'; document.getElementById('title').focus();}
+  function closeModal(){ modal.style.display='none'; clearForm(); }
+
+  function clearForm(){
+    document.getElementById('title').value='';
+    document.getElementById('file').value='';
+    document.getElementById('desc').value='';
+    document.getElementById('tags').value='';
+    document.getElementById('thumbnail').value='';
+    document.getElementById('course').selectedIndex = 0;
+  }
+
+  function submitEpisode(){
+    const title = document.getElementById('title').value.trim();
+    const file = document.getElementById('file').files[0];
+    if(!title || !file){
+      alert('Por favor informe o título e selecione um arquivo de áudio.');
+      return;
+    }
+    alert('Episódio "'+title+'" enviado para revisão. (Simulação)');
+    closeModal();
+  }
+
+  // Acessibilidade: fechar modal com Esc
+  document.addEventListener('keydown', e => {
+    if(e.key === 'Escape') closeModal();
+  });
+
+  // Tornar navegação acessível com Enter e Espaço
+  document.querySelectorAll('.nav-item').forEach(item=>{
+    item.addEventListener('keydown', e=>{
+      if(e.key === 'Enter' || e.key === ' ') item.click();
+    });
+  });
+
+  // 🔁 Função de sair
+  const logoutBtn = document.querySelector('.logout');
+  logoutBtn.addEventListener('click', () => {
+    const confirmExit = confirm("Deseja realmente sair?");
+    if (confirmExit) {
+      window.location.href = "../auth/login.html";
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Talksy — Painel Administrativo</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+
+  <style>
+    :root {
+      --purple-900: #4b00c2;
+      --purple-700: #6f20d9;
+      --purple-500: #9a5bff;
+      --bg: #faf7ff;
+      --card: #fff;
+      --muted: #6b6b6b;
+      --shadow: 0 6px 18px rgba(11,8,40,0.08);
+      font-family: "Inter", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      display: flex;
+      min-height: 100vh;
+      background: linear-gradient(180deg, var(--bg), #fff);
+      color: #111;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background: linear-gradient(180deg, var(--purple-700), var(--purple-900));
+      color: #fff;
+      padding: 28px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 26px;
+      font-weight: 700;
+    }
+
+    .logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+    }
+
+    nav {
+      display: flex;
+      flex-direction: column;
+      margin-top: 30px;
+      gap: 8px;
+    }
+
+    .nav-item {
+      padding: 10px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      color: rgba(255, 255, 255, 0.9);
+      transition: background 0.2s;
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .logout {
+      margin-top: 30px;
+      padding: 10px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      text-align: center;
+      cursor: pointer;
+    }
+
+    /* Main */
+    main {
+      flex: 1;
+      padding: 32px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+
+    header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--purple-700);
+    }
+
+    .avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: linear-gradient(180deg, var(--purple-500), var(--purple-700));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .card h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: var(--purple-700);
+    }
+
+    .card p {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .stat {
+      font-size: 28px;
+      font-weight: 700;
+      margin-top: 10px;
+      color: var(--purple-900);
+    }
+
+    .chart {
+      display: flex;
+      gap: 6px;
+      align-items: flex-end;
+      height: 120px;
+      margin-top: 12px;
+    }
+
+    .bar {
+      width: 10%;
+      background: var(--purple-500);
+      border-radius: 4px;
+      transition: height 0.3s;
+    }
+
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    input {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    button {
+      background: var(--purple-700);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-size: 14px;
+    }
+
+    button:hover {
+      background: var(--purple-500);
+    }
+
+    /* Tabela de usuários */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      border: 1px solid #eee;
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background: #f3f0ff;
+      color: var(--purple-700);
+    }
+
+    td button {
+      background: #e63946;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 5px 8px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    td button:hover {
+      background: #c62828;
+    }
+
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      main { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div>
+      <div class="brand">
+        <div class="logo">T</div>
+        <div>Talksy</div>
+      </div>
+      <nav>
+        <div class="nav-item active">Dashboard</div>
+        <div class="nav-item" id="toggleCreator">Cadastrar Criador</div>
+        <div class="nav-item" id="toggleUsers">Usuários Cadastrados</div>
+      </nav>
+    </div>
+    <div class="logout" id="logoutBtn">Sair</div>
+  </aside>
+
+  <!-- Main -->
+  <main>
+    <header>
+      <h1>Painel Administrativo</h1>
+      <div class="avatar" id="avatar">AD</div>
+    </header>
+
+    <section class="grid">
+      <div class="card">
+        <h2>Acessos Diários</h2>
+        <div class="chart" id="chart"></div>
+      </div>
+
+      <div class="card">
+        <h2>Usuários Totais</h2>
+        <p>Total (mockados + localStorage):</p>
+        <div class="stat" id="userCount">0</div>
+      </div>
+
+      <div class="card" id="creatorFormCard" style="display:none;">
+        <h2>Cadastrar Novo Criador</h2>
+        <div class="form">
+          <input type="text" id="creatorName" placeholder="Usuário">
+          <input type="password" id="creatorPass" placeholder="Senha">
+          <button onclick="addCreator()">Cadastrar</button>
+          <p id="creatorMsg" style="font-size:13px;color:#6b6b6b;"></p>
+        </div>
+      </div>
+
+      <div class="card" id="userTableCard" style="display:none;">
+        <h2>Usuários Cadastrados</h2>
+        <table id="userTable">
+          <thead>
+            <tr>
+              <th>Usuário</th>
+              <th>Tipo</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // --- Sessão ---
+    const logged = JSON.parse(localStorage.getItem('loggedUser'));
+    if(!logged || logged.type !== 'admin'){
+      alert('Acesso negado! Somente administradores podem entrar.');
+      localStorage.removeItem('loggedUser');
+      location.replace('../auth/login.html');
+    }
+
+    const avatarEl = document.getElementById('avatar');
+    avatarEl.textContent = logged.username.substring(0,2).toUpperCase();
+
+    // --- Dados base ---
+    const baseUsers = [
+      { username: "consumer", type: "consumer" },
+      { username: "criador", type: "criador" },
+      { username: "admin", type: "admin" }
+    ];
+    let storedUsers = JSON.parse(localStorage.getItem("users")) || [];
+
+    // --- Atualiza contador de usuários ---
+    function updateUserCount() {
+      const total = baseUsers.length + storedUsers.length;
+      document.getElementById("userCount").textContent = total;
+    }
+    updateUserCount();
+
+    // --- Gera gráfico simples ---
+    const chart = document.getElementById("chart");
+    for(let i=0;i<10;i++){
+      const bar = document.createElement("div");
+      bar.className = "bar";
+      bar.style.height = (Math.random()*100 + 20) + "px";
+      chart.appendChild(bar);
+    }
+
+    // --- Mostrar/Ocultar seções ---
+    document.getElementById("toggleCreator").addEventListener("click",()=>{
+      toggleVisibility("creatorFormCard");
+    });
+    document.getElementById("toggleUsers").addEventListener("click",()=>{
+      toggleVisibility("userTableCard");
+      renderUserTable();
+    });
+
+    function toggleVisibility(id){
+      const el = document.getElementById(id);
+      el.style.display = (el.style.display === "none") ? "block" : "none";
+    }
+
+    // --- Cadastro de criador ---
+    function addCreator(){
+      const name = document.getElementById("creatorName").value.trim();
+      const pass = document.getElementById("creatorPass").value.trim();
+      const msg = document.getElementById("creatorMsg");
+
+      if(!name || !pass){
+        msg.textContent = "Preencha todos os campos.";
+        msg.style.color = "#e63946";
+        return;
+      }
+
+      let users = JSON.parse(localStorage.getItem("users")) || [];
+      if(users.find(u => u.username === name)){
+        msg.textContent = "Usuário já existe.";
+        msg.style.color = "#e63946";
+        return;
+      }
+
+      users.push({
+        username: name,
+        password: pass,
+        type: "criador",
+        redirect: "../../pages/criador/criador.html"
+      });
+
+      localStorage.setItem("users", JSON.stringify(users));
+      msg.textContent = "Criador cadastrado com sucesso!";
+      msg.style.color = "#2aa84a";
+      document.getElementById("creatorName").value = "";
+      document.getElementById("creatorPass").value = "";
+      storedUsers = users;
+      updateUserCount();
+      renderUserTable();
+    }
+
+    // --- Renderiza tabela de usuários ---
+    function renderUserTable(){
+      const tbody = document.querySelector("#userTable tbody");
+      tbody.innerHTML = "";
+
+      const allUsers = [...baseUsers, ...storedUsers];
+      allUsers.forEach(u=>{
+        const tr = document.createElement("tr");
+        const isMock = baseUsers.some(b=>b.username === u.username);
+        tr.innerHTML = `
+          <td>${u.username}</td>
+          <td>${u.type}</td>
+          <td>${isMock ? "<em>—</em>" : `<button onclick='removeUser("${u.username}")'>Remover</button>`}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // --- Remover usuário ---
+    function removeUser(username){
+      if(!confirm("Remover usuário " + username + "?")) return;
+      storedUsers = storedUsers.filter(u => u.username !== username);
+      localStorage.setItem("users", JSON.stringify(storedUsers));
+      updateUserCount();
+      renderUserTable();
+    }
+
+    // --- Logout ---
+    document.getElementById("logoutBtn").addEventListener("click",()=>{
+      if(confirm("Deseja realmente sair?")){
+        localStorage.removeItem("loggedUser");
+        location.replace("../auth/login.html");
+      }
+    });
+  </script>
+</body>
+</html>
