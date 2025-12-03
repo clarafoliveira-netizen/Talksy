@@ -228,24 +228,27 @@
       <h2>Descubra novos podcasts</h2>
       <div class="card-grid">
         <div class="card">
-          <img src="https://source.unsplash.com/300x200/?technology" alt="Podcast 1">
-          <h3>Introdução à Robótica</h3>
-          <p>Compreenda os conceitos fundamentais da automação e robótica aplicada à indústria 4.0.</p>
-          <button class="btn" onclick="playPodcast('audios/podcast1.mp3')">Ouvir agora</button>
+          <img src="https://picsum.photos/id/1/600/400" alt="Podcast 1">
+          <h3>API com FastAPI</h3>
+          <p>Desenvolva APIs modernas com FastAPI, explorando performance, rotas, validação e integrações essenciais.</p>
+          <!-- alterado para usar o arquivo assets/api.m4a -->
+          <button class="btn" onclick="playPodcast('../../assets/api.m4a')">Ouvir agora</button>
         </div>
 
         <div class="card">
-          <img src="https://source.unsplash.com/300x200/?energy" alt="Podcast 2">
-          <h3>Eficiência Energética</h3>
-          <p>Dicas e práticas sustentáveis para otimizar o consumo de energia elétrica.</p>
-          <button class="btn" onclick="playPodcast('audios/podcast2.mp3')">Ouvir agora</button>
+          <img src="https://picsum.photos/id/2/600/400" alt="Podcast 2">
+          <h3>Infraestrura de Redes</h3>
+          <p>Conceitos fundamentais de redes, cabeamento, protocolos e boas práticas para garantir comunicação eficiente.</p>
+          <!-- alterado para usar o arquivo assets/api.m4a -->
+          <button class="btn" onclick="playPodcast('../../assets/redes.m4a')">Ouvir agora</button>
         </div>
 
         <div class="card">
-          <img src="https://source.unsplash.com/300x200/?engineering" alt="Podcast 3">
-          <h3>Segurança no Trabalho</h3>
-          <p>Entenda como prevenir acidentes e garantir boas práticas em ambientes industriais.</p>
-          <button class="btn" onclick="playPodcast('audios/podcast3.mp3')">Ouvir agora</button>
+          <img src="https://picsum.photos/id/7/600/400" alt="Podcast 3">
+          <h3>Metodologias Ágeis</h3>
+          <p>Entenda como aplicar Scrum, Kanban e práticas ágeis para melhorar processos e acelerar entregas.</p>
+          <!-- alterado para usar o arquivo assets/api.m4a -->
+          <button class="btn" onclick="playPodcast('../../assets/gestao.m4a')">Ouvir agora</button>
         </div>
       </div>
     </section>
@@ -276,7 +279,11 @@
       const audio = document.getElementById("audioPlayer");
       playerSection.style.display = "block";
       audio.src = src;
-      audio.play();
+      audio.load();   // garante o carregamento do arquivo antes de tocar
+      audio.play().catch(err => {
+        // se o navegador bloquear play automático por política, apenas logamos o erro
+        console.warn("Playback falhou:", err);
+      });
     }
 
     // Logout
